@@ -1,78 +1,89 @@
-# AgriSense // Predictive Intelligence
+# Crop Yield Predictor
 
-AgriSense is a highly polished, production-ready full-stack analytical platform designed to forecast agricultural yields. It leverages continuous machine learning branch logic mapped against historic crop data to return precise metric outputs based on regional and environmental inputs.
+The Crop Yield Predictor is a full-stack web application designed to forecast agricultural yields based on environmental and regional inputs such as location, season, crop type, and area size. 
 
-## High-Fidelity UI/UX Structure
+## Overview
 
-The front end has been completely overhauled around the **Obsidian Vault** design paradigm. 
-- **Cinematic Rendering:** Leveraging `GSAP` layout timelines, backdrop blurring, fluid grid positioning, and purely CSS-based geometric noise architecture.
-- **Dynamic Data Interfacing:** Natively fetches configuration schemas (available States, Crops, Seasons) dynamically via asynchronous backend endpoints linked directly to the trained `LabelEncoder` parameters.
-- **Structural Integrity:** Natively engineered for extreme responsiveness. Mobile triggers off-canvas drawers, Tablets generate massive 2-column tactical layouts, and Desktop runs horizontal sidebar anchoring.
+The application is split into two primary components:
+1. A FastAPI backend that serves predictions from a trained machine learning model.
+2. A React frontend that provides a clean, modern interface for users to input data and view results.
 
-## The Model Engine
+When a user submits the required parameters, the backend processes the input through a Random Forest Regressor, which analyzes historical agricultural data to estimate the expected yield.
 
-Our initial approach scoped an elementary Multiple Linear Regression algorithm. However, agricultural prediction maps heavily to non-linear rules (parsing over 100 crop varieties across varied ecological zones). Linear Regression severely plateaued at an unviable `R² = 0.088`.
+## The Model
 
-To mathematically intercept these vectors, the core calculation engine was transitioned to an advanced **Random Forest Regressor**. Rather than trying to draw a linear approximation, it evaluates continuous branching logic (e.g. tracking specific crop performances during specific seasons relative to localized regions) resulting in a massive boost to ~88% precision (`R² = 0.885`).
+Our initial approach used a Multiple Linear Regression model. However, predicting crop yields is highly non-linear, especially when factoring in over 100 different crop varieties across various states and seasons. The Linear Regression model could not capture these complex relationships, resulting in a low accuracy score (R² = 0.11).
 
-### Technology Stack
-**Core Backend**
+To address this, we transitioned to a Random Forest Regressor. A Random Forest uses an ensemble of multiple decision trees. Rather than trying to draw a single line of best fit, it evaluates continuous branching decisions (e.g., specific crops during specific seasons in specific states). This allowed the model to effectively learn customized rules for each crop type, dramatically improving the prediction accuracy to roughly 88% (R² = 0.88).
+
+## Tech Stack
+
+### Backend
 - **Language**: Python
-- **API Framework**: FastAPI
-- **Inference Engine**: `scikit-learn` & `joblib`
+- **Framework**: FastAPI
+- **Machine Learning**: scikit-learn (Random Forest Regressor)
+- **Role**: Loads the trained model pipelines and provides the `/predict` API endpoint.
 
-**Presentation Shell (Frontend)**
-- **Framework**: React / Vite
-- **Styling Architecture**: Tailwind CSS
-- **Animation Backbone**: GSAP / Lucide React
+### Frontend
+- **Framework**: React (Vite)
+- **Styling**: Tailwind CSS
+- **Animations**: GSAP
+- **Role**: Handles user interaction, form validation, and displays the prediction results.
 
----
+## Local Development Setup
 
-## Local Development Execution
+To run this project locally, you will need to start both the backend server and the frontend development server.
 
-### 1. Booting the Computing Node (Backend)
+### 1. Start the Backend
 
-Open a terminal and step into the backend root:
+Open a terminal and navigate to the backend directory:
+
 ```bash
 cd backend
 ```
 
-Deploy the virtual environment:
-- **Windows**: `venv\Scripts\activate`
-- **macOS/Linux**: `source venv/bin/activate`
+Activate the virtual environment:
+- On Windows:
+  ```bash
+  venv\Scripts\activate
+  ```
+- On macOS/Linux:
+  ```bash
+  source venv/bin/activate
+  ```
 
-Acquire the dependency protocols:
+Install the required dependencies (only required once):
 ```bash
 pip install -r requirements.txt
 ```
 
-Launch the inference server:
+Start the FastAPI server:
 ```bash
 uvicorn main:app --reload
 ```
-*The endpoint will connect locally to `http://127.0.0.1:8000`.*
+The API will be available at `http://127.0.0.1:8000`.
 
-### 2. Booting the Presentation Shell (Frontend)
+### 2. Start the Frontend
 
-Establish a secondary terminal instance and step into the frontend root:
+Open a second terminal window and navigate to the frontend directory:
+
 ```bash
 cd frontend
 ```
 
-Download module packages:
+Install the Node modules (only required once):
 ```bash
 npm install
 ```
 
-Start the Vite development compiler:
+Start the Vite development server:
 ```bash
 npm run dev
 ```
-*The shell will execute locally at `http://localhost:5173`.*
+The web interface will typically be available at `http://localhost:5173`. 
 
-## System Usage
+## Usage
 
-1. Open the local compiler port in your browser.
-2. Select your environmental variables via the dropdown arrays (these are structurally locked to valid parameters via the backend `/options` schema).
-3. Input the required variable surface area in hectares.
-4. Execute the calculation to trigger the dashboard result module.
+1. Open the frontend local URL in your web browser.
+2. Select the relevant parameters from the dropdowns and enter the area size.
+3. Submit the form to receive the predicted yield based on the trained model.
