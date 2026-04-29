@@ -438,7 +438,7 @@ print(f"  MAE      : {mae:.1f} units")
 # Crop type usually dominates — that tells you why LR failed
 print("\nFeature importances:")
 for feat, imp in zip(FEATURES, model.feature_importances_):
-    bar = "█" * int(imp * 50)
+    bar = "=" * int(imp * 50)
     print(f"  {feat:12} {imp:.3f} {bar}")
 
 # Sample predictions vs actual
@@ -449,7 +449,7 @@ for actual, pred in zip(np.expm1(y_test[:5]), np.expm1(y_pred_log[:5])):
 # ── Save ──────────────────────────────────────────────────
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-joblib.dump(model,    os.path.join(MODEL_DIR, "model.pkl"))
+joblib.dump(model,    os.path.join(MODEL_DIR, "model.pkl"), compress=3)
 joblib.dump(encoders, os.path.join(MODEL_DIR, "encoders.pkl"))
 joblib.dump(FEATURES, os.path.join(MODEL_DIR, "features.pkl"))
 joblib.dump(True,     os.path.join(MODEL_DIR, "log_transformed.pkl"))
