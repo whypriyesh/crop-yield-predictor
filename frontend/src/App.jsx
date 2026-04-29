@@ -34,6 +34,8 @@ function App() {
   const sidebarWidgetsRef = useRef([]);
   const formInputsRef = useRef([]);
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
   useEffect(() => {
     // Initial timeline for entry animations
     const tl = gsap.timeline();
@@ -59,7 +61,7 @@ function App() {
     );
 
     // Fetch dropdown options from the backend
-    fetch("http://localhost:8000/options")
+    fetch(`${API_URL}/options`)
       .then(res => res.json())
       .then(data => {
         if(!data.error) setOptions(data);
@@ -80,7 +82,7 @@ function App() {
     setResult(null);
 
     try {
-      const res = await fetch("http://localhost:8000/predict", {
+      const res = await fetch(`${API_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
