@@ -1,49 +1,77 @@
 @import "tailwindcss";
 
 @theme {
-  --color-vantablack: #050505;
-  --color-tungsten: #2A2A2A;
-  --color-goldleaf: #D4AF37;
+  --color-void: #060a06;
+  --color-panel: #0f1a0f;
+  --color-border: #1e2e1e;
+  --color-green: #22c55e;
+  --color-green-dim: #16a34a;
+  --color-green-muted: #14532d;
   --font-syne: "Syne", sans-serif;
   --font-playfair: "Playfair Display", serif;
 }
 
 @layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    background-color: var(--color-vantablack);
-    color: white;
+    background-color: var(--color-void);
+    color: #f0f0f0;
     margin: 0;
     overflow-x: hidden;
+    font-family: "Syne", sans-serif;
   }
+  select { background-image: none; }
 }
 
-/* Global Noise Layer */
-.noise-overlay {
+/* noise */
+.noise {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   pointer-events: none;
-  z-index: 50;
-  opacity: 0.15;
+  z-index: 100;
+  opacity: 0.12;
   mix-blend-mode: overlay;
 }
 
-/* Hide scrollbar for Application Shell feel */
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+/* thin scrollbar */
+.scroller {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34,197,94,0.2) transparent;
+}
+.scroller::-webkit-scrollbar { width: 3px; }
+.scroller::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.2); border-radius: 9px; }
+.scroller::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar { width: 0; }
+
+/* button shine on hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -80%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: skewX(-20deg);
+  transition: none;
+}
+.btn-primary:hover::before {
+  animation: sweep 0.9s ease forwards;
 }
 
-@keyframes shine {
-  100% {
-    transform: translateX(150%) skewX(12deg);
-  }
+@keyframes sweep {
+  to { left: 130%; }
 }
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
 }
